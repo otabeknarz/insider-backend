@@ -42,6 +42,12 @@ class User(AbstractUser):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.set_password(self.password if self.password else self.id)
+
+        super(User, self).save(*args, **kwargs)
+
 
 class Region(BaseModel):
     name = models.CharField(max_length=100)

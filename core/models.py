@@ -71,17 +71,6 @@ class Task(BaseModel):
     def __str__(self):
         return f"{self.created_by} - {self.name}"
 
-    def save(self, *args, **kwargs):
-        super(Task, self).save(*args, **kwargs)
-
-        if self.created_at == self.updated_at and self.status in self.StatusChoices.ASSIGNED:
-            for user in self.assigned_users.all():
-                Notification.objects.create(
-                    task=self,
-                    user=user,
-
-                )
-
 
 class Notification(BaseModel):
     id = models.CharField(primary_key=True, default=get_random_id, max_length=40)
@@ -101,7 +90,7 @@ class Notification(BaseModel):
         return f"{self.task} - {self.user}"
 
     def save(self, *args, **kwargs):
-        if not self.pk:
+        if self.created_at == self.updated_at:
             send_telegram_message(self.user.id, self.message)
 
         super(Notification, self).save(*args, **kwargs)
