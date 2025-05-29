@@ -184,8 +184,8 @@ if not TELEGRAM_BOT_TOKEN:
     raise Exception("TELEGRAM_BOT_TOKEN environment variable not set")
 
 # URLs
-BASE_URL = "https://insiderapi.ibratdebate.uz"
-TASKS_URL = BASE_URL + "/tasks"
-TEAMS_URL = BASE_URL + "/teams"
+BASE_FRONTEND_URL = "https://insider.ibratdebate.uz"
+TASKS_URL = BASE_FRONTEND_URL + "/tasks"
+TEAMS_URL = BASE_FRONTEND_URL + "/teams"
 TASK_URL_WITH_ID = lambda id_: TASKS_URL + "/" + str(id_)
 TEAM_URL_WITH_ID = lambda id_: TEAMS_URL + "/" + str(id_)
