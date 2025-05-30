@@ -127,6 +127,10 @@ class TaskViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
 
+    def get_queryset(self):
+        return self.request.user.assigned_tasks.all()
+
+
 class TeamViewSet(viewsets.ModelViewSet):
     queryset = Team.objects.all().select_related('owner').prefetch_related('admins', 'members', 'messages')
     pagination_class = LimitOffsetPagination
