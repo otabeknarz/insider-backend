@@ -7,10 +7,13 @@ from insider.base_model import BaseModel
 
 
 def send_telegram_message(chat_id, text):
-    telegram_bot_api_url = (
-        f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage?chat_id={chat_id}&text={text}"
-    )
-    requests.post(telegram_bot_api_url)
+    try:
+        url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage"
+        payload = {"chat_id": chat_id, "text": text}
+        response = requests.post(url, json=payload, timeout=5)
+        response.raise_for_status()
+    except requests.RequestException as e:
+        print(f"Telegram error: {e}")
 
 
 class Team(BaseModel):
@@ -27,13 +30,15 @@ class Team(BaseModel):
         return f"Team - {self.name}"
 
     def save(self, *args, **kwargs):
+        is_new = self._state.adding
         super().save(*args, **kwargs)
-
-        try:
+        if is_new and self.owner:
             self.admins.add(self.owner)
             self.members.add(self.owner)
-        except Exception as e:
-            print(e)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name_plural = "Teams"
 
 
 class Task(BaseModel):
@@ -88,12 +93,6 @@ class Notification(BaseModel):
 
     def __str__(self):
         return f"{self.task} - {self.user}"
-
-    def save(self, *args, **kwargs):
-        if self.created_at == self.updated_at:
-            send_telegram_message(self.user.id, self.message)
-
-        super(Notification, self).save(*args, **kwargs)
 
 
 class Message(BaseModel):
