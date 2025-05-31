@@ -99,6 +99,8 @@ from rest_framework import viewsets
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from core.models import Task, Team, Notification, Comment
 from .serializers import (
@@ -129,6 +131,20 @@ class TaskViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return self.request.user.assigned_tasks.all()
+
+    @action(detail=False, methods=['get'], url_path='by-me')
+    def by_me(self, request):
+        tasks = self.get_queryset().filter(created_by=request.user)
+        page = self.paginate_queryset(tasks)
+        serializer = self.get_serializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
+
+    @action(detail=False, methods=['get'], url_path='to-me')
+    def to_me(self, request):
+        tasks = self.get_queryset().filter(assigned_users=request.user)
+        page = self.paginate_queryset(tasks)
+        serializer = self.get_serializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
 
 
 class TeamViewSet(viewsets.ModelViewSet):
