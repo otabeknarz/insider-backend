@@ -134,14 +134,14 @@ class TaskViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'], url_path='by-me')
     def by_me(self, request):
-        tasks = self.get_queryset().filter(created_by=request.user)
+        tasks = Task.objects.filter(created_by=request.user)
         page = self.paginate_queryset(tasks)
         serializer = self.get_serializer(page, many=True)
         return self.get_paginated_response(serializer.data)
 
     @action(detail=False, methods=['get'], url_path='to-me')
     def to_me(self, request):
-        tasks = self.get_queryset().filter(assigned_users=request.user)
+        tasks = Task.objects.filter(assigned_users=request.user)
         page = self.paginate_queryset(tasks)
         serializer = self.get_serializer(page, many=True)
         return self.get_paginated_response(serializer.data)
