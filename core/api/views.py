@@ -132,7 +132,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         return Task.objects.filter(
-            Q(created_by=user) | Q(assigned_to=user)
+            Q(created_by=user) | Q(assigned_users=user)
         ).distinct()
 
     @action(detail=False, methods=['get'], url_path='by-me')
