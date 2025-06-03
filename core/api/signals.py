@@ -93,7 +93,7 @@ def notify_comment(sender, instance, created, **kwargs):
         message = f"@{instance.user} commented on your task {settings.TASK_URL_WITH_ID(instance.task.id)}\n{instance.message}"
         Notification.objects.create(
             task=instance,
-            user_id=instance.created_by.id,
+            user_id=instance.user.id,
             message=message
         )
 
