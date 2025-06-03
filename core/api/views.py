@@ -168,6 +168,22 @@ class TeamViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
+    def perform_update(self, serializer):
+        data = serializer.validated_data
+        being_removed_members = data.get('members_remove', [])
+        being_removed_admins = data.get('admins_remove', [])
+
+        if being_removed_members:
+            # Assuming they are IDs:
+            members_to_remove = serializer.instance.members.filter(id__in=being_removed_members)
+            serializer.instance.members.remove(*members_to_remove)
+
+        if being_removed_admins:
+            admins_to_remove = serializer.instance.admins.filter(id__in=being_removed_admins)
+            serializer.instance.admins.remove(*admins_to_remove)
+
+        serializer.save()
+
 
 class TeamTaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
