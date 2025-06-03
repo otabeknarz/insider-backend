@@ -26,4 +26,4 @@ team_router.register(r'tasks', views.TeamTaskViewSet, basename='team-tasks')
 task_router = NestedDefaultRouter(router, r'tasks', lookup='task')
 task_router.register(r'comments', views.TaskCommentViewSet, basename='task-comments')
 
-urlpatterns = router.urls + task_router.urls
+urlpatterns = router.urls + task_router.urls + team_router.urls
