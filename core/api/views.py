@@ -100,6 +100,7 @@ from rest_framework.pagination import LimitOffsetPagination
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
+from rest_framework.response import Response
 from django.db.models import Q
 
 from core.models import Task, Team, Notification, Comment
@@ -182,5 +183,10 @@ class TaskCommentViewSet(viewsets.ModelViewSet):
         return Comment.objects.filter(task_id=self.kwargs['task_pk'])
 
     def perform_create(self, serializer):
+        return Response({
+            "task": serializer.data,
+            "user": self.request.user.id,
+            "task_id": self.kwargs['task_pk']
+        })
         serializer.save(user=self.request.user, task_id=self.kwargs['task_pk'])
 
