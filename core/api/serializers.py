@@ -62,10 +62,20 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = "__all__"
 
+
+class TeamSerializer(serializers.ModelSerializer):
+    owner = UserSerializer(read_only=True)
+
+    class Meta:
+        model = Team
+        fields = "__all__"
+
+
 class TaskDetailSerializer(serializers.ModelSerializer):
     comments = serializers.SerializerMethodField()
     assigned_users = UserSerializer(many=True, read_only=True)
     created_by = UserSerializer(read_only=True)
+    team = TeamSerializer(read_only=True)
 
     class Meta:
         model = Task
@@ -75,12 +85,6 @@ class TaskDetailSerializer(serializers.ModelSerializer):
         comments = obj.comments.all()
         return CommentSerializer(comments, many=True).data
 
-class TeamSerializer(serializers.ModelSerializer):
-    owner = UserSerializer(read_only=True)
-
-    class Meta:
-        model = Team
-        fields = "__all__"
 
 class TeamDetailSerializer(serializers.ModelSerializer):
     messages = serializers.SerializerMethodField()
