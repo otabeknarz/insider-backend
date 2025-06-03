@@ -169,7 +169,7 @@ class TeamViewSet(viewsets.ModelViewSet):
         serializer.save(owner=self.request.user)
 
     def perform_update(self, serializer):
-        data = serializer.validated_data
+        data = self.request.data
         being_removed_members = data.get('members_remove', [])
         being_removed_admins = data.get('admins_remove', [])
 
