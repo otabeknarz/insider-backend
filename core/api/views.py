@@ -183,10 +183,4 @@ class TaskCommentViewSet(viewsets.ModelViewSet):
         return Comment.objects.filter(task_id=self.kwargs['task_pk'])
 
     def perform_create(self, serializer):
-        return Response({
-            "task": serializer.data,
-            "user": self.request.user.id,
-            "task_id": self.kwargs['task_pk']
-        })
         serializer.save(user=self.request.user, task_id=self.kwargs['task_pk'])
-
