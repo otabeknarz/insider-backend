@@ -168,6 +168,18 @@ class TeamViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
+
+class TeamTaskViewSet(viewsets.ModelViewSet):
+    serializer_class = TaskSerializer
+    pagination_class = LimitOffsetPagination
+
+    def get_queryset(self):
+        return Task.objects.filter(team_id=self.kwargs['team_pk'])
+
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user, team_id=self.kwargs['team_pk'])
+
+
 class NotificationViewSet(viewsets.ModelViewSet):
     serializer_class = NotificationSerializer
     pagination_class = LimitOffsetPagination

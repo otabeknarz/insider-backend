@@ -20,6 +20,9 @@ router.register(r'tasks', views.TaskViewSet, basename='task')
 router.register(r'teams', views.TeamViewSet, basename='team')
 router.register(r'notifications', views.NotificationViewSet, basename='notification')
 
+team_router = NestedDefaultRouter(router, r'teams', lookup='team')
+team_router.register(r'tasks', views.TeamTaskViewSet, basename='team-tasks')
+
 task_router = NestedDefaultRouter(router, r'tasks', lookup='task')
 task_router.register(r'comments', views.TaskCommentViewSet, basename='task-comments')
 
