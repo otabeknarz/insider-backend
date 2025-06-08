@@ -5,8 +5,24 @@ from .models import User, Position, Region, District
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ("id", "first_name", "last_name", "username", "position", "region", "date_joined")
-    search_fields = ("id", "first_name", "last_name", "username", "position", "region")
+    list_display = (
+        "id",
+        "first_name",
+        "last_name",
+        "username",
+        "position",
+        "region",
+        "date_joined",
+    )
+    search_fields = (
+        "id",
+        "first_name",
+        "last_name",
+        "username",
+        "position__name",
+        "region__name",
+        "district__name",
+    )
     ordering = ("id", "username", "first_name", "last_name")
 
 
