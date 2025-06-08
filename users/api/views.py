@@ -11,7 +11,7 @@ from users.models import User, Region, District, Position
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    queryset = User.objects.exclude(is_superuser=True)
     serializer_class = UserSerializer
     pagination_class = LimitOffsetPagination
 
