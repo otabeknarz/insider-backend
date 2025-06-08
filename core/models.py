@@ -72,9 +72,17 @@ class Task(BaseModel):
         choices=PriorityChoices.choices, default=PriorityChoices.MEDIUM
     )
     deadline = models.DateTimeField(null=True, blank=True)
+    is_archived = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.created_by} - {self.name}"
+
+    def delete(self, *args, **kwargs):
+        if not self.is_archived:
+            self.is_archived = True
+            self.save(update_fields=["is_archived"])
+        else:
+            super().delete(*args, **kwargs)
 
 
 class Notification(BaseModel):
