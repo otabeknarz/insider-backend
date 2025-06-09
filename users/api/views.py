@@ -6,7 +6,13 @@ from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 
-from .serializers import UserSerializer, SetPasswordSerializer, RegionSerializer, DistrictSerializer, PositionSerializer
+from .serializers import (
+    UserSerializer,
+    SetPasswordSerializer,
+    RegionSerializer,
+    DistrictSerializer,
+    PositionSerializer,
+)
 from users.models import User, Region, District, Position
 
 
@@ -21,10 +27,10 @@ class UserViewSet(viewsets.ModelViewSet):
         filters.OrderingFilter,
     ]
 
-    filterset_fields = ['first_name', 'last_name', 'username']
-    search_fields = ['first_name', 'last_name', 'username']
-    ordering_fields = ['created_at']
-    ordering = ['-created_at']
+    filterset_fields = ["first_name", "last_name", "username"]
+    search_fields = ["first_name", "last_name", "username"]
+    ordering_fields = ["created_at"]
+    ordering = ["-created_at"]
 
     def get_serializer_class(self):
         if self.action == "set_password":
@@ -86,9 +92,9 @@ class RegionViewSet(viewsets.ModelViewSet):
         filters.SearchFilter,
         filters.OrderingFilter,
     ]
-    search_fields = ['name']
-    ordering_fields = ['created_at']
-    ordering = ['-created_at']
+    search_fields = ["name"]
+    ordering_fields = ["created_at"]
+    ordering = ["-created_at"]
 
 
 class DistrictViewSet(viewsets.ModelViewSet):
@@ -100,9 +106,9 @@ class DistrictViewSet(viewsets.ModelViewSet):
         filters.SearchFilter,
         filters.OrderingFilter,
     ]
-    search_fields = ['name']
-    ordering_fields = ['created_at']
-    ordering = ['-created_at']
+    search_fields = ["name"]
+    ordering_fields = ["created_at"]
+    ordering = ["-created_at"]
 
 
 class PositionViewSet(viewsets.ModelViewSet):
@@ -114,6 +120,6 @@ class PositionViewSet(viewsets.ModelViewSet):
         filters.SearchFilter,
         filters.OrderingFilter,
     ]
-    search_fields = ['name']
-    ordering_fields = ['created_at']
-    ordering = ['-created_at']
+    search_fields = ["name"]
+    ordering_fields = ["created_at"]
+    ordering = ["-created_at"]

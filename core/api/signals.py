@@ -50,22 +50,20 @@ from core.models import Task, Team, Notification, Comment
 from users.models import User
 import requests
 
+
 def send_telegram_message(chat_id, text):
     telegram_bot_api_url = (
         f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage"
     )
-    requests.post(telegram_bot_api_url, data={'chat_id': chat_id, 'text': text})
+    requests.post(telegram_bot_api_url, data={"chat_id": chat_id, "text": text})
+
 
 @receiver(m2m_changed, sender=Task.assigned_users.through)
 def notify_assigned_users(sender, instance, action, pk_set, **kwargs):
     if action == "post_add":
         message = f"@{instance.created_by} has assigned you a task.\n{settings.TASK_URL_WITH_ID(instance.id)}"
         for user_id in pk_set:
-            Notification.objects.create(
-                task=instance,
-                user_id=user_id,
-                message=message
-            )
+            Notification.objects.create(task=instance, user_id=user_id, message=message)
 
 
 @receiver(m2m_changed, sender=Team.members.through)
@@ -73,11 +71,7 @@ def notify_team_members(sender, instance, action, pk_set, **kwargs):
     if action == "post_add":
         message = f"You have been added to the {instance.name} team.\n{settings.TEAM_URL_WITH_ID(instance.id)}"
         for user_id in pk_set:
-            Notification.objects.create(
-                team=instance,
-                user_id=user_id,
-                message=message
-            )
+            Notification.objects.create(team=instance, user_id=user_id, message=message)
 
 
 @receiver(post_save, sender=Comment)
@@ -85,16 +79,10 @@ def notify_comment(sender, instance, created, **kwargs):
     if created and instance.task:
         message = f"@{instance.user} commented on task {settings.TASK_URL_WITH_ID(instance.task.id)}\n{instance.message}"
         for user in instance.task.assigned_users.all():
-            Notification.objects.create(
-                task=instance.task,
-                user=user,
-                message=message
-            )
+            Notification.objects.create(task=instance.task, user=user, message=message)
         message = f"@{instance.user} commented on your task {settings.TASK_URL_WITH_ID(instance.task.id)}\n{instance.message}"
         Notification.objects.create(
-            task=instance.task,
-            user_id=instance.task.created_by.id,
-            message=message
+            task=instance.task, user_id=instance.task.created_by.id, message=message
         )
 
 

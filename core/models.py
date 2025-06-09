@@ -37,7 +37,7 @@ class Team(BaseModel):
             self.members.add(self.owner)
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ["-created_at"]
         verbose_name_plural = "Teams"
 
 

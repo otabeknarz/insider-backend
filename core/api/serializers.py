@@ -57,6 +57,7 @@ from rest_framework import serializers
 from core.models import Team, Task, Notification, Comment, Message
 from users.api.serializers import UserSerializer
 
+
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
@@ -100,10 +101,12 @@ class TeamDetailSerializer(serializers.ModelSerializer):
         messages = obj.messages.all()
         return MessageSerializer(messages, many=True).data
 
+
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
         fields = "__all__"
+
 
 class CommentSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
@@ -111,7 +114,8 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = "__all__"
-        read_only_fields = ['user', 'task']
+        read_only_fields = ["user", "task"]
+
 
 class MessageSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)

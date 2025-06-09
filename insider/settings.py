@@ -54,10 +54,7 @@ INSTALLED_APPS = [
 
 CORS_ALLOW_ALL_ORIGINS = True if DEBUG else False
 
-CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:3000",
-    "https://insider.ibratdebate.uz"
-]
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "https://insider.ibratdebate.uz"]
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -156,10 +153,10 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
-    'DEFAULT_FILTER_BACKENDS': (
-        'django_filters.rest_framework.DjangoFilterBackend',
-        'rest_framework.filters.SearchFilter',
-        'rest_framework.filters.OrderingFilter',
+    "DEFAULT_FILTER_BACKENDS": (
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.SearchFilter",
+        "rest_framework.filters.OrderingFilter",
     ),
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 100,
