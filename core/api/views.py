@@ -51,14 +51,20 @@ class TaskViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=["get"], url_path="by-me")
     def by_me(self, request):
         tasks = Task.objects.filter(created_by=request.user)
-        page = self.paginate_queryset(tasks)
+        backend = DjangoFilterBackend()
+        filtered_queryset = backend.filter_queryset(request, tasks, self)
+
+        page = self.paginate_queryset(filtered_queryset)
         serializer = self.get_serializer(page, many=True)
         return self.get_paginated_response(serializer.data)
 
     @action(detail=False, methods=["get"], url_path="to-me")
     def to_me(self, request):
         tasks = Task.objects.filter(assigned_users=request.user)
-        page = self.paginate_queryset(tasks)
+        backend = DjangoFilterBackend()
+        filtered_queryset = backend.filter_queryset(request, tasks, self)
+
+        page = self.paginate_queryset(filtered_queryset)
         serializer = self.get_serializer(page, many=True)
         return self.get_paginated_response(serializer.data)
 
