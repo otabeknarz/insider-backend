@@ -77,13 +77,6 @@ class Task(BaseModel):
     def __str__(self):
         return f"{self.created_by} - {self.name}"
 
-    def delete(self, *args, **kwargs):
-        if not self.is_archived:
-            self.is_archived = True
-            self.save(update_fields=["is_archived"])
-        else:
-            super().delete(*args, **kwargs)
-
 
 class Notification(BaseModel):
     id = models.CharField(primary_key=True, default=get_random_id, max_length=40)
