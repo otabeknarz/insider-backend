@@ -48,6 +48,13 @@ class TaskViewSet(viewsets.ModelViewSet):
             Q(created_by=user) | Q(assigned_users=user)
         ).distinct()
 
+    @action(methods=["post"], detail=False, url_path="bulk")
+    def bulk_create(self, request):
+        ser = TaskBulkCreateSerializer(data=request.data)
+        ser.is_valid(raise_exception=True)
+        tasks = ser.save()
+        return Response(TaskSerializer(tasks, many=True).data, status=201)
+
     @action(detail=False, methods=["get"], url_path="by-me")
     def by_me(self, request):
         tasks = Task.objects.filter(created_by=request.user)

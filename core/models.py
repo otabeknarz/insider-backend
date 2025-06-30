@@ -58,8 +58,8 @@ class Task(BaseModel):
     created_by = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, related_name="tasks"
     )
-    assigned_users = models.ManyToManyField(
-        User, related_name="assigned_tasks", blank=True
+    assigned_user = models.ForeignKey(
+        User, related_name="assigned_tasks", on_delete=models.SET_NULL, null=True
     )
     team = models.ForeignKey(
         Team, on_delete=models.SET_NULL, null=True, related_name="tasks"

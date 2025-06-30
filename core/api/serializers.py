@@ -53,6 +53,7 @@
 
 # chatgpt
 
+from django.db import transaction
 from rest_framework import serializers
 from core.models import Team, Task, Notification, Comment, Message
 from users.api.serializers import UserSerializer
@@ -123,3 +124,18 @@ class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
         fields = "__all__"
+
+
+class TaskBulkCreateSerializer(TaskSerializer):
+    assigned_user = serializers.ListField(
+        child=serializers.IntegerField(), min_length=1
+    )
+
+    def create(self, validated):
+        assignees = validated.pop("assigned_user")
+        with transaction.atomic():
+            tasks = [
+                Task.objects.create(assigned_user_id=u, **validated)
+                for u in assignees
+            ]
+        return tasks
