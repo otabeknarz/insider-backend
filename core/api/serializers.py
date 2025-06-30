@@ -75,7 +75,7 @@ class TeamSerializer(serializers.ModelSerializer):
 
 class TaskDetailSerializer(serializers.ModelSerializer):
     comments = serializers.SerializerMethodField()
-    assigned_users = UserSerializer(many=True, read_only=True)
+    assigned_user = UserSerializer(read_only=True)
     created_by = UserSerializer(read_only=True)
     team = TeamSerializer(read_only=True)
 

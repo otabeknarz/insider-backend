@@ -3,6 +3,7 @@ from rest_framework.pagination import LimitOffsetPagination
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
+from rest_framework.response import Response
 from django.db.models import Q
 
 from core.models import Task, Team, Notification, Comment
@@ -13,6 +14,7 @@ from .serializers import (
     TeamDetailSerializer,
     NotificationSerializer,
     CommentSerializer,
+    TaskBulkCreateSerializer
 )
 
 
@@ -45,7 +47,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         return Task.objects.filter(
-            Q(created_by=user) | Q(assigned_users=user)
+            Q(created_by=user) | Q(assigned_user=user)
         ).distinct()
 
     @action(methods=["post"], detail=False, url_path="bulk")
