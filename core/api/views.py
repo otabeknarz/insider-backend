@@ -22,7 +22,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     queryset = (
         Task.objects.all()
         .select_related("created_by", "team")
-        .prefetch_related("assigned_users", "comments")
+        .prefetch_related("assigned_user", "comments")
         .filter(is_archived=False)
     )
     pagination_class = LimitOffsetPagination
@@ -31,7 +31,7 @@ class TaskViewSet(viewsets.ModelViewSet):
         filters.SearchFilter,
         filters.OrderingFilter,
     ]
-    filterset_fields = ["assigned_users", "team", "is_archived"]
+    filterset_fields = ["assigned_user", "team", "is_archived"]
     search_fields = ["name", "description"]
     ordering_fields = ["created_at"]
     ordering = ["-created_at"]
@@ -69,7 +69,7 @@ class TaskViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["get"], url_path="to-me")
     def to_me(self, request):
-        tasks = Task.objects.filter(assigned_users=request.user)
+        tasks = Task.objects.filter(assigned_user=request.user)
         backend = DjangoFilterBackend()
         filtered_queryset = backend.filter_queryset(request, tasks, self)
 
