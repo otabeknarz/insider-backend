@@ -52,7 +52,7 @@ class TaskViewSet(viewsets.ModelViewSet):
 
     @action(methods=["post"], detail=False, url_path="bulk")
     def bulk_create(self, request):
-        ser = TaskBulkCreateSerializer(data=request.data)
+        ser = TaskBulkCreateSerializer(data=request.data + {"created_by": request.user.pk})
         ser.is_valid(raise_exception=True)
         tasks = ser.save()
         return Response(TaskSerializer(tasks, many=True).data, status=201)
